@@ -28,6 +28,7 @@ class User extends Authenticatable
         'contactInfo',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -59,5 +60,60 @@ class User extends Authenticatable
                     )
                     SELECT * FROM downline WHERE level=1 ");
         return $ref_list;
+    }
+
+    public static function LevelOne($id)
+    {
+        $ref_list = DB::select("WITH RECURSIVE downline AS(
+                        SELECT id, firstName, middleName, lastName, activationCode, 0 as level
+                        FROM users where id='$id' UNION ALL
+                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
+                        FROM downline d, users u WHERE u.sponsorID=d.id
+                    )
+                    SELECT COUNT(id)as multiplier FROM downline WHERE level=1 ");
+        return $ref_list;
+    }
+
+    public static function LevelTwo($id)
+    {
+        $ref_list = DB::select("WITH RECURSIVE downline AS(
+                        SELECT id, firstName, middleName, lastName, activationCode, 0 as level
+                        FROM users where id='$id' UNION ALL
+                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
+                        FROM downline d, users u WHERE u.sponsorID=d.id
+                    )
+                    SELECT COUNT(id) as multiplier FROM downline WHERE level=2 ");
+        return $ref_list;
+    }
+
+    public static function LevelThree($id)
+    {
+        $ref_list = DB::select("WITH RECURSIVE downline AS(
+                        SELECT id, firstName, middleName, lastName, activationCode, 0 as level
+                        FROM users where id='$id' UNION ALL
+                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
+                        FROM downline d, users u WHERE u.sponsorID=d.id
+                    )
+                    SELECT COUNT(id) as multiplier FROM downline WHERE level=3 ");
+        return $ref_list;
+
+    }
+
+    public static function LevelFour($id)
+    {
+        $ref_list = DB::select("WITH RECURSIVE downline AS(
+                        SELECT id, firstName, middleName, lastName, activationCode, 0 as level
+                        FROM users where id='$id' UNION ALL
+                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
+                        FROM downline d, users u WHERE u.sponsorID=d.id
+                    )
+                    SELECT COUNT(id) as multiplier FROM downline WHERE level=4 ");
+        return $ref_list;
+    }
+
+    public static function newUserID($activationCode)
+    {
+        $newUser = TABLE::select('id')->where('activationCode', $activationCode)->first();
+        return $newUser;
     }
 }
