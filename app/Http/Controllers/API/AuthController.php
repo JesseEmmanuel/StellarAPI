@@ -139,7 +139,7 @@ class AuthController extends Controller
                 $levelThreeSubTotalRebate = $levelThreeMultiplier*16;
                 $levelFourSubTotalRebate = $levelFourMultiplier*16;
                 $totalRebate = $levelOneSubTotalRebate + $levelTwoSubTotalRebate + $levelThreeSubTotalRebate + $levelFourSubTotalRebate;
-                $totalStars = $levelOneMultiplier + $levelTwoMultiplier + ($levelThreeMultiplier*2) + ($levelFourMultiplier*2);
+                $totalStars = $levelOneMultiplier + $levelTwoMultiplier + $levelThreeMultiplier + ($levelFourMultiplier*2);
                 $codeStatus = ActivationCode::codeStatus($activationCode);
                 $userID = User::select('id')->where('activationCode', $activationCode)->get();
                 foreach($userID as $userid){
