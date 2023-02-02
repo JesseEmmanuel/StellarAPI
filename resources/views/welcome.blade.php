@@ -7,6 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Laravel Welcome</h1>
+    <h1>This is Stellar's API</h1>
 </body>
 </html>
