@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\StartupLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,76 +18,36 @@ class StartupController extends Controller
     public function DirectReferrals()
     {
         $id = auth('sanctum')->user()->id;
-        $directRef = new User;
-        $directRef = $directRef->DirectReferral($id);
+        $directRef = User::DirectReferral($id);
         return response()->json([
             "referrals" => $directRef
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function startupLogs()
     {
-        //
+        $id = auth('sanctum')->user()->id;
+        $startupLogs = StartupLog::logs($id);
+        return response()->json(["logs" => $startupLogs
+    ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function viewLevelOne($id)
     {
-        //
+        $directRef = User::DirectReferral($id);
+        $userInfo = User::where('id', $id)->first();
+        return response()->json([
+            "referrals" => $directRef,
+            "userInfo" => $userInfo
+        ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
+    public function rebate()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
+        $id = auth('sanctum')->user()->id;
+        $rebate = StartupLog::totalRebate($id);
+        return response()->json([
+            "rebate" => $rebate
+        ], 200);
     }
 }

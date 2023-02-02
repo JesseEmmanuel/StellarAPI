@@ -14,6 +14,6 @@ class ActivationCodeSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\ActivationCode::factory(20)->create();
+        \App\Models\ActivationCode::factory(100)->create();
     }
 }

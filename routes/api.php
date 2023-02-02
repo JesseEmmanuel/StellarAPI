@@ -23,3 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/addUser', [AuthController::class, 'addStartupUser']);
 Route::get('/view', [StartupController::class, 'DirectReferrals']);
+Route::get('/startupLogs', [StartupController::class, 'startupLogs']);
+Route::get('/totalRebate', [StartupController::class, 'rebate']);
+Route::get('view-direct-referrals/{id}', [StartupController::class, 'viewLevelOne']);

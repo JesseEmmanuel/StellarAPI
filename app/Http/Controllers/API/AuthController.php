@@ -99,6 +99,25 @@ class AuthController extends Controller
             $isCodeUsed = User::where('activationCode', $request->get('activationCode'))->first();
             if($isCodeUsed === null)
             {
+                $activationCode = $request->get('activationCode');
+                $sponsorID = auth('sanctum')->user()->id;
+                $sponsor = auth('sanctum')->user()->firstName;
+                $password = "test123";
+                $role = "user";
+                $addedUserName = $request->get('firstName')." ".$request->get('middleName')." ".$request->get('lastName');
+                $newUser = array(
+                    "sponsorID" => $sponsorID,
+                    "activationCode" => $activationCode,
+                    "firstName" => $request->get('firstName'),
+                    "middleName" => $request->get('middleName'),
+                    "lastName" => $request->get('lastName'),
+                    "date_of_birth" => $request->get('date_of_birth'),
+                    "contactInfo" => $request->get('contactInfo'),
+                    "email" => $request->get('email'),
+                    "password" => Hash::make($password),
+                    "role" => "user"
+                );
+                User::create($newUser);
                 $levelOneCount = User::LevelOne(auth('sanctum')->user()->id);
                 foreach($levelOneCount as $count1){
                     $levelOneMultiplier = $count1->multiplier;
@@ -121,25 +140,7 @@ class AuthController extends Controller
                 $levelFourSubTotalRebate = $levelFourMultiplier*16;
                 $totalRebate = $levelOneSubTotalRebate + $levelTwoSubTotalRebate + $levelThreeSubTotalRebate + $levelFourSubTotalRebate;
                 $totalStars = $levelOneMultiplier + $levelTwoMultiplier + ($levelThreeMultiplier*2) + ($levelFourMultiplier*2);
-                $activationCode = $request->get('activationCode');
-                $sponsorID = auth('sanctum')->user()->id;
-                $sponsor = auth('sanctum')->user()->firstName;
-                $password = "test123";
-                $role = "user";
-                $addedUserName = $request->get('firstName')." ".$request->get('middleName')." ".$request->get('lastName');
-                $newUser = array(
-                    "sponsorID" => $sponsorID,
-                    "activationCode" => $activationCode,
-                    "firstName" => $request->get('firstName'),
-                    "middleName" => $request->get('middleName'),
-                    "lastName" => $request->get('lastName'),
-                    "date_of_birth" => $request->get('date_of_birth'),
-                    "contactInfo" => $request->get('contactInfo'),
-                    "email" => $request->get('email'),
-                    "password" => Hash::make($password),
-                    "role" => "user"
-                );
-                User::create($newUser);
+                $codeStatus = ActivationCode::codeStatus($activationCode);
                 $userID = User::select('id')->where('activationCode', $activationCode)->get();
                 foreach($userID as $userid){
                     $newUserID = $userid->id;

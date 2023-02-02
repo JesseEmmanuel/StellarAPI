@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 use DB;
 
 class User extends Authenticatable
@@ -50,12 +51,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function DirectReferral($id)
+    public static function DirectReferral($id)
     {
         $ref_list = DB::select("WITH RECURSIVE downline AS(
-                        SELECT id, firstName, middleName, lastName, activationCode, 0 as level
+                        SELECT id, firstName, middleName, lastName, activationCode, email, 0 as level
                         FROM users where id='$id' UNION ALL
-                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
+                        SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, u.email, d.level+1
                         FROM downline d, users u WHERE u.sponsorID=d.id
                     )
                     SELECT * FROM downline WHERE level=1 ");
@@ -116,4 +117,7 @@ class User extends Authenticatable
         $newUser = TABLE::select('id')->where('activationCode', $activationCode)->first();
         return $newUser;
     }
+
+
+
 }
