@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\StartupLog;
+use App\Models\StartupSavings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +27,7 @@ class StartupController extends Controller
     public function startupLogs()
     {
         $id = auth('sanctum')->user()->id;
-        $startupLogs = StartupLog::logs($id);
+        $startupLogs = StartupSavings::logs($id);
         return response()->json(["logs" => $startupLogs
     ], 200);
     }
@@ -42,12 +42,14 @@ class StartupController extends Controller
         ], 200);
     }
 
-    public function rebate()
+    public function summaryReports()
     {
         $id = auth('sanctum')->user()->id;
-        $rebate = StartupLog::totalRebate($id);
+        $startupRebate = StartupSavings::totalStartupRebate($id);
+        $startupstars = StartupSavings::totalStartupStars($id);
         return response()->json([
-            "rebate" => $rebate
+            "StartupRebate" => $startupRebate,
+            "StartupStars" => $startupstars,
         ], 200);
     }
 }

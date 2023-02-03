@@ -24,5 +24,5 @@ Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/addUser', [AuthController::class, 'addStartupUser']);
 Route::get('/view', [StartupController::class, 'DirectReferrals']);
 Route::get('/startupLogs', [StartupController::class, 'startupLogs']);
-Route::get('/totalRebate', [StartupController::class, 'rebate']);
+Route::get('/summaryReports', [StartupController::class, 'summaryReports']);
 Route::get('view-direct-referrals/{id}', [StartupController::class, 'viewLevelOne']);

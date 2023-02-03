@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\StartupLog;
+use App\Models\StartupSavings;
 use App\Models\ActivationCode;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
@@ -153,7 +153,7 @@ class AuthController extends Controller
                     "totalRebate" => $totalRebate,
                     "totalStars" => $totalStars
                 );
-                StartupLog::create($newLog);
+                StartupSavings::create($newLog);
                 return response()->json([
                     "message" => "Added Successfully",
                     "New User" => $newUser,
