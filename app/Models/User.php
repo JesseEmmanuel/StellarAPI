@@ -29,8 +29,11 @@ class User extends Authenticatable
         'contactInfo',
         'email',
         'password',
+        'IsUpgraded',
         'role',
     ];
+
+    protected $table = 'users';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -114,10 +117,11 @@ class User extends Authenticatable
 
     public static function newUserID($activationCode)
     {
-        $newUser = TABLE::select('id')->where('activationCode', $activationCode)->first();
-        return $newUser;
+        return DB::table('users')
+                    ->select('id')
+                    ->where('activationCode', $activationCode)
+                    ->get();
     }
-
 
 
 }

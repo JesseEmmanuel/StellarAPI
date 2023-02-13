@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\StartupSavings;
+use App\Models\GreatSavings;
 use App\Models\ActivationCode;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
@@ -34,9 +35,9 @@ class AuthController extends Controller
         }
 
         $credentials = $request->only('email', 'password');
-        if(Auth::attempt($credentials)){
+        if(Auth::attempt($credentials))
+        {
             $user = User::where('email', $request->get('email'))->first();
-
             return response()->json([
                 'message' => 'Signed in successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
@@ -46,7 +47,7 @@ class AuthController extends Controller
         else
         {
             return response()->json([
-                'message' => 'Invalid email and password'
+                'message' => 'Invalid email or password'
             ], 401);
         }
     }
@@ -79,7 +80,8 @@ class AuthController extends Controller
             'email' => 'required',
         ]);
 
-        if($validator->fails()){
+        if($validator->fails())
+        {
             return response()->json([
                 'message' => 'All Fields are Required',
                 'errors' => $validator->errors()
@@ -101,7 +103,10 @@ class AuthController extends Controller
             {
                 $activationCode = $request->get('activationCode');
                 $sponsorID = auth('sanctum')->user()->id;
-                $sponsor = auth('sanctum')->user()->firstName;
+                $sponsorFname = auth('sanctum')->user()->firstName;
+                $sponsorMname = auth('sanctum')->user()->middleName;
+                $sponsorLname = auth('sanctum')->user()->lastName;
+                $sponsor = $sponsorFname." ".$sponsorMname." ".$sponsorLname;
                 $password = "test123";
                 $role = "user";
                 $addedUserName = $request->get('firstName')." ".$request->get('middleName')." ".$request->get('lastName');
@@ -115,41 +120,38 @@ class AuthController extends Controller
                     "contactInfo" => $request->get('contactInfo'),
                     "email" => $request->get('email'),
                     "password" => Hash::make($password),
+                    "IsUpgraded" => 0,
                     "role" => "user"
                 );
                 User::create($newUser);
-                $levelOneCount = User::LevelOne(auth('sanctum')->user()->id);
-                foreach($levelOneCount as $count1){
-                    $levelOneMultiplier = $count1->multiplier;
-                }
-                $levelTwoCount = User::LevelTwo(auth('sanctum')->user()->id);
-                foreach($levelTwoCount as $count2){
-                    $levelTwoMultiplier = $count2->multiplier;
-                }
-                $levelThreeCount = User::LevelThree(auth('sanctum')->user()->id);
-                foreach($levelThreeCount as $count3){
-                    $levelThreeMultiplier = $count3->multiplier;
-                }
-                $levelFourCount = User::LevelFour(auth('sanctum')->user()->id);
-                foreach($levelFourCount as $count4){
-                    $levelFourMultiplier = $count4->multiplier;
-                }
-                $levelOneSubTotalRebate = $levelOneMultiplier*50;
-                $levelTwoSubTotalRebate = $levelTwoMultiplier*8;
-                $levelThreeSubTotalRebate = $levelThreeMultiplier*16;
-                $levelFourSubTotalRebate = $levelFourMultiplier*16;
-                $totalRebate = $levelOneSubTotalRebate + $levelTwoSubTotalRebate + $levelThreeSubTotalRebate + $levelFourSubTotalRebate;
-                $totalStars = $levelOneMultiplier + $levelTwoMultiplier + $levelThreeMultiplier + ($levelFourMultiplier*2);
-                $codeStatus = ActivationCode::codeStatus($activationCode);
                 $userID = User::select('id')->where('activationCode', $activationCode)->get();
                 foreach($userID as $userid){
                     $newUserID = $userid->id;
                 }
+                $totalRebate = StartupSavings::totalStartupRebate($sponsorID);
+                $totalStars = StartupSavings::totalStartupStars($sponsorID);
+                $encashment = StartupSavings::getEncashment($sponsorID);
+                foreach($encashment as $cash)
+                {
+                    $rawEncashment = $cash->encashment;
+                }
+                $rebateBalance = $totalRebate - $rawEncashment;
+                StartupSavings::updateStartup($sponsorID, $totalRebate, $totalStars, $rebateBalance);
+                $data = array(
+                    "id" => $newUserID,
+                    "rebate" => 0,
+                    "stars" => 0,
+                    "encashment" => 0,
+                    "rebateBalance" => 0
+                );
+                StartupSavings::newStartupData($data);
+                GreatSavings::newGreatSaveData($data);
+                $codeStatus = ActivationCode::codeStatus($activationCode);
                 $newLog = array(
                     "id" => $newUserID,
                     "sponsorID" => $sponsorID,
-                    "addedUser" => $addedUserName,
-                    "addedBy" => $sponsor,
+                    "title" => "New Start-up Account Added",
+                    "description" => $sponsor." "."added"." ".$addedUserName." ",
                     "totalRebate" => $totalRebate,
                     "totalStars" => $totalStars
                 );
@@ -159,9 +161,6 @@ class AuthController extends Controller
                     "New User" => $newUser,
                     "New Log" => $newLog
                 ]);
-                // return response()->json([
-                //         "message" => $newUserID,
-                //     ]);
             }
             else
             {
