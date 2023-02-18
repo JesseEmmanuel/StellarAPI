@@ -5,8 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\GreatSavings;
+use App\Models\StartupSavings;
 use App\Models\GenealogyLogs;
 use App\Models\EncashmentLogs;
+use App\Models\ActivationCode;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,56 +30,10 @@ class GreatController extends Controller
         // dd($isUpgraded);
         if($isUpgraded === 0)
         {
-            foreach($countLevelTwo as $count)
-            {
-                $validLevelTwo = $count->counter;
-            }
-            if($validLevelTwo >= 10)
-            {
-                GreatSavings::PromoteToGreatSavings($id);
-                $sponsorID = GreatSavings::getSponsorID($id);
-                $fName = auth('sanctum')->user()->firstName;
-                $mName = auth('sanctum')->user()->middleName;
-                $lName = auth('sanctum')->user()->lastName;
-                $user = $fName." ".$mName." ".$lName;
-                $directRef = GreatSavings::DirectReferrals($id);
-                $totalRebate = GreatSavings::totalGreatSaveRebate($id);
-                $totalStars = GreatSavings::totalGreatSaveStars($id);
-                $encashments = GreatSavings::getEncashment($id);
-                foreach($encashments as $cash)
-                    {
-                        $rawEncashment = $cash->encashment;
-                    }
-                $rebateBalance = $totalRebate - $rawEncashment;
-                GreatSavings::updateGreatSave($id, $totalRebate, $totalStars, $rebateBalance);
-                foreach($sponsorID as $sponsor)
-                {
-                    $userSponsor = $sponsor->sponsorID;
-                }
-                $newLog = array(
-                    "id" => $id,
-                    "sponsorID" => $userSponsor,
-                    "title" => "Account Upgrade",
-                    "description" => $user."'s"." "."account is now officially upgraded to Great Savings",
-                    "totalRebate" => $totalRebate,
-                    "totalStars" => $totalStars
-                );
-                // GenealogyLogs::create($newLog);
-                $directRef = GreatSavings::DirectReferrals($id);
-                return response()->json([
-                    "referrals" => $directRef,
-                    "logs" => $newLog,
-                    "Current Balance" => $rebateBalance,
-                    // "Level 2 Count" => $countLevelTwo
-                ], 200);
-            }
-            else
-            {
-                return response()->json([
+            return response()->json([
                     "message" => "Referrals under Level 2 hasn't reached 64 accounts yet. This Account is not yet valid for Great Savings",
-                    "LevelTwoCount" => $validLevelTwo."/64"
-                ], 201);
-            }
+            ], 201);
+
         }
         else
         {
@@ -98,9 +55,125 @@ class GreatController extends Controller
         }
     }
 
+    public function addUser(Request $request)
+    {
+        $id = auth('sanctum')->user()->id;
+        $validator = Validator::make($request->all(), [
+            'activationCode' => 'required',
+            'firstName' => 'required',
+            'middleName' => 'required',
+            'lastName' => 'required',
+            'date_of_birth' => 'required',
+            'contactInfo' => 'required',
+            'email' => 'required',
+        ]);
+        $user = DB::table('users')->where('id', $id)->first();
+        $userAccountType = $user->IsUpgraded;
+        if($userAccountType === 0)
+        {
+            return response()->json([
+                'message' => 'Failed to add user. Account is not qualified',
+            ], 402);
+        }
+        if($validator->fails())
+        {
+            return response()->json([
+                'message' => 'All Fields are Required',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $activationCode = '';
+        $activeCode = ActivationCode::where('activationCode', $request->get('activationCode'))->first();
+        if($activeCode === null)
+        {
+            return response()->json([
+                "message" => "Code doesn't exist"
+            ], 401);
+        }
+        $isCodeUsed = User::where('activationCode', $request->get('activationCode'))->first();
+        if($isCodeUsed === null)
+        {
+            $activationCode = $request->get('activationCode');
+            $sponsorID = auth('sanctum')->user()->id;
+            $sponsorFname = auth('sanctum')->user()->firstName;
+            $sponsorMname = auth('sanctum')->user()->middleName;
+            $sponsorLname = auth('sanctum')->user()->lastName;
+            $sponsor = $sponsorFname." ".$sponsorMname." ".$sponsorLname;
+            $password = "test123";
+            $role = "user";
+            $addedUserName = $request->get('firstName')." ".$request->get('middleName')." ".$request->get('lastName');
+            $newUser = array(
+                "sponsorID" => $sponsorID,
+                "activationCode" => $activationCode,
+                "firstName" => $request->get('firstName'),
+                "middleName" => $request->get('middleName'),
+                "lastName" => $request->get('lastName'),
+                "date_of_birth" => $request->get('date_of_birth'),
+                "contactInfo" => $request->get('contactInfo'),
+                "email" => $request->get('email'),
+                "password" => Hash::make($password),
+                "IsUpgraded" => 1,
+                "role" => "user"
+            );
+            User::create($newUser);
+            $userID = User::select('id')->where('activationCode', $activationCode)->get();
+            foreach($userID as $userid){
+                $newUserID = $userid->id;
+            }
+            $totalRebate = GreatSavings::totalGreatSaveRebate($sponsorID);
+            $totalStars = GreatSavings::totalGreatSaveStars($sponsorID);
+            $encashment = GreatSavings::getEncashment($sponsorID);
+            foreach($encashment as $cash)
+            {
+                $rawEncashment = $cash->encashment;
+            }
+            $rebateBalance = $totalRebate - $rawEncashment;
+            GreatSavings::updateGreatSave($sponsorID, $totalRebate, $totalStars, $rawEncashment, $rebateBalance);
+            $data = array(
+                "id" => $newUserID,
+                "rebate" => 0,
+                "stars" => 0,
+                "encashment" => 0,
+                "rebateBalance" => 0
+            );
+            StartupSavings::newStartupData($data);
+            GreatSavings::newGreatSaveData($data);
+            $codeStatus = ActivationCode::codeStatus($activationCode);
+            $newLog = array(
+                "id" => $newUserID,
+                "sponsorID" => $sponsorID,
+                "title" => "New Great Savings Account Added",
+                "description" => $sponsor." "."added"." ".$addedUserName." ",
+                "totalRebate" => $totalRebate,
+                "totalStars" => $totalStars
+            );
+            StartupSavings::create($newLog);
+            return response()->json([
+                "message" => "Added Successfully",
+                "New User" => $newUser,
+                "New Log" => $newLog
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "message" => "Code is already used"
+            ], 402);
+        }
+    }
+
     public function summaryReports()
     {
         $id = auth('sanctum')->user()->id;
+        $hasGreatSavings = DB::table('greatsavings')->where('userID', $id)->first();
+        if($hasGreatSavings === null)
+        {
+            return response()->json([
+                "GreatSavingsRebate" => "N/A",
+                "GreatSavingsStars" => "N/A",
+            ], 200);
+        }
         $totalRebate = GreatSavings::totalGreatSaveRebate($id);
         $totalStars = GreatSavings::totalGreatSaveStars($id);
         $encashment = GreatSavings::getEncashment($id);
@@ -121,7 +194,7 @@ class GreatController extends Controller
             $stars = $initStars->stars;
         }
         return response()->json([
-            "GreatSavingsRebate" => $rebateBalance,
+            "GreatSavingsRebate" => "₱".$rebateBalance.".00",
             "GreatSavingsStars" => $totalStars,
         ], 200);
     }

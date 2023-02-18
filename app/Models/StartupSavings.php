@@ -21,59 +21,83 @@ class StartupSavings extends Model
         'totalStars',
     ];
 
+    public static function getAll()
+    {
+        return DB::select("SELECT users.activationCode, startupsavings.fullName, users.role, startupsavings.userID
+        FROM startupsavings INNER JOIN users ON startupsavings.userID = users.id
+        WHERE (((users.role)='user'))");
+    }
+
     public static function logs($id)
     {
         return DB::select("WITH RECURSIVE downline AS
-                    (select id, title, description, totalRebate, totalStars, created_at from genealogy_logs WHERE id = '$id'
-                    UNION ALL SELECT g.id, g.title, g.description, g.totalRebate, g.totalStars, g.created_at FROM downline d,
+                    (select id, title, description, totalRebate, created_at from genealogy_logs WHERE id = '$id'
+                    UNION ALL SELECT g.id, g.title, g.description, g.totalRebate, g.created_at FROM downline d,
                     genealogy_logs g WHERE g.sponsorID=d.id)
-                    SELECT * from downline;");
+                    SELECT * from downline");
     }
 
     public static function DirectReferrals($id)
     {
         return DB::select("WITH RECURSIVE downline AS(
-            SELECT id, firstName, middleName, lastName, activationCode, email, 0 as level
-            FROM users where id='$id' UNION ALL
-            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, u.email, d.level+1
-            FROM downline d, users u WHERE u.sponsorID=d.id
+            SELECT userID, fullName, 0 as level
+            FROM startupsavings where userID='$id' UNION ALL
+            SELECT s.userID, s.fullName, d.level+1
+            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
         )
         SELECT * FROM downline WHERE level=1");
+    }
+
+    public static function levelCount($id, $levelNum)
+    {
+        $lvlOne = DB::select("WITH RECURSIVE downline AS(
+            SELECT userID, 0 as level
+            FROM startupsavings where userID='$id' UNION ALL
+            SELECT s.userID, d.level+1
+            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
+        )
+        SELECT COUNT(userID)as count FROM downline WHERE level=$levelNum");
+
+        foreach($lvlOne as $countresult)
+        {
+            $lvlOneCount = $countresult->count;
+        }
+        return $lvlOneCount;
     }
 
     public static function totalStartupRebate($id)
     {
         $levelOneCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id)as multiplier FROM downline WHERE level=1");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=1");
 
         $levelTwoCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=2 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=2");
 
         $levelThreeCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=3 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=3");
 
         $levelFourCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=4 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=4");
 
         foreach($levelOneCount as $count1)
         {
@@ -103,36 +127,36 @@ class StartupSavings extends Model
     public static function totalStartupStars($id)
     {
         $levelOneCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id)as multiplier FROM downline WHERE level=1");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=1");
 
         $levelTwoCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=2 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=2");
 
         $levelThreeCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=3 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=3");
 
         $levelFourCount = DB::select("WITH RECURSIVE downline AS(
-                            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-                            FROM users where id='$id' UNION ALL
-                            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-                            FROM downline d, users u WHERE u.sponsorID=d.id
+                            SELECT userID, 0 as level
+                            FROM startupsavings where userID='$id' UNION ALL
+                            SELECT s.userID, d.level+1
+                            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
                         )
-                        SELECT COUNT(id) as multiplier FROM downline WHERE level=4 ");
+                        SELECT COUNT(userID)as multiplier FROM downline WHERE level=4");
 
         foreach($levelOneCount as $count1)
         {
@@ -202,6 +226,29 @@ class StartupSavings extends Model
                     values (?, ?, ?, ?, ?)",
                     [
                         $id, $rebate, $stars, $encashment, $rebateBalance
+                    ]);
+    }
+
+    public static function checkSlot($id)
+    {
+        return DB::select("WITH RECURSIVE downline AS(
+            SELECT userID, 0 as level
+            FROM startupsavings where userID='$id' UNION ALL
+            SELECT s.userID, d.level+1
+            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
+        )
+        SELECT COUNT(userID)as slots FROM downline WHERE level=1");
+    }
+
+    public static function newStartupUser($data)
+    {
+        $userID = $data['userID'];
+        $sponsorID = $data['sponsorID'];
+        $fullName = $data['fullName'];
+        DB::insert("INSERT into startupsavings (userID, sponsorID, fullName)
+                    values (?,?,?)",
+                    [
+                        $userID, $sponsorID, $fullName
                     ]);
     }
 

@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
@@ -22,9 +27,16 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function auth(Request $request)
     {
-        //
+        $data = $request->validate([
+            "email" => "required",
+            "password" => "required"
+        ]);
+        if(auth()->attempt($data)){
+            $request->session()->regenerate();
+            return redirect('/dashboard');
+        }
     }
 
     /**
@@ -80,6 +92,8 @@ class AuthController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        Session::flush();
+        Auth::logout();
+        return redirect('/');
     }
 }

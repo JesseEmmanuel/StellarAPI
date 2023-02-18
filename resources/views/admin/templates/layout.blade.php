@@ -1,9 +1,12 @@
 @include('admin.templates.head')
-@include('admin.templates.sidebar')
 @include('admin.templates.header')
-<div class="content-wrapper">
-    <div class="container-xxl flex-grow-1 container-p-y">
+@include('admin.templates.sidebar')
+<main>
+    <div class="container-fluid site-width">
         @yield('content')
     </div>
-</div>
-@include('admin.templates.footer')
+</main>
+<a href="#" class="scrollup text-center">
+    <i class="icon-arrow-up"></i>
+</a>
+@include('admin.templates.scripts')

@@ -18,6 +18,5 @@ class GenealogyLogs extends Model
         'title',
         'description',
         'totalRebate',
-        'totalStars',
     ];
 }

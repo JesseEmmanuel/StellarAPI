@@ -23,7 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
-Route::post('/addUser', [AuthController::class, 'addStartupUser']);
+Route::post('/addStartupAccount', [StartupController::class, 'addUser']);
+Route::post('/addGreatSaveAccount', [GreatController::class, 'addUser']);
 Route::get('/viewStartup', [StartupController::class, 'DirectReferrals']);
 Route::get('/viewGreatSave', [GreatController::class, 'DirectReferrals']);
 Route::get('/userLogs', [StartupController::class, 'startupLogs']);

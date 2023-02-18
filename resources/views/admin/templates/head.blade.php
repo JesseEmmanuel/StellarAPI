@@ -1,66 +1,46 @@
 <!DOCTYPE html>
+<html lang="en">
+<!-- START: Head-->
 
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
+<head>
+    <meta charset="UTF-8">
+    <title>Stellar Admin</title>
+    <link rel="shortcut icon" href="dist/images/stellar.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
+    <!-- START: Template CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-
+alpha/css/bootstrap.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="{{ url('dist/vendors/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/jquery-ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/jquery-ui/jquery-ui.theme.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/simple-line-icons/css/simple-line-icons.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/flags-icon/css/flag-icon.min.css') }}">
+    <!-- END Template CSS-->
 
-=========================================================
- -->
-<!-- beautify ignore:start -->
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+    <!-- START: Page CSS-->
+    <link rel="stylesheet" href="{{ url('dist/vendors/chartjs/Chart.min.css') }}">
+    <!-- END: Page CSS-->
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <!-- START: Page CSS-->
+    <link rel="stylesheet" href="{{ url('dist/vendors/select2/css/select2.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('dist/vendors/select2/css/select2-bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('dist/vendors/datatable/css/dataTables.bootstrap4.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('dist/vendors/icofont/icofont.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/materialdesign-webfont/css/materialdesignicons.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('dist/vendors/morris/morris.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/weather-icons/css/pe-icon-set-weather.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/chartjs/Chart.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/starrr/starrr.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/jquery-jvectormap/jquery-jvectormap-2.0.3.css') }}">
+    <!-- END: Page CSS-->
 
-    <meta name="description" content="" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
-
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
-
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
-    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
-
-    <!-- Page CSS -->
-
-    <!-- Helpers -->
-    <script src="../assets/vendor/js/helpers.js"></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../assets/js/config.js"></script>
-  </head>
+    <!-- START: Custom CSS-->
+    <link rel="stylesheet" href="{{ url('dist/css/main.css') }}">
+    <!-- END: Custom CSS-->
+</head>
