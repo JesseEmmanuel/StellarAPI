@@ -28,6 +28,13 @@ class StartupSavings extends Model
         WHERE (((users.role)='user'))");
     }
 
+    public static function startups()
+    {
+        return DB::select("SELECT startupsavings.userID, startupsavings.fullName, users.IsUpgraded, users.activationCode, users.role
+        FROM startupsavings INNER JOIN users ON startupsavings.userID = users.id
+        WHERE (((users.IsUpgraded)=0) AND ((users.role)='user'))");
+    }
+
     public static function logs($id)
     {
         return DB::select("WITH RECURSIVE downline AS

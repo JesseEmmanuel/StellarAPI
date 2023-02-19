@@ -14,7 +14,7 @@
             </li>
             <li class="dropdown"><a href="#"><i class="icon-organization mr-1"></i> Accounts</a>
                 <ul>
-                    <li><a href="index-account.html"><i class="mdi mdi-account-star-outline fa-lg"></i> Start-up Savings</a></li>
+                    <li class="<?= ($activePage == 'startupsavings') ? 'active':'' ?>"><a href="{{ url('startupsavings') }}"><i class="mdi mdi-account-star-outline fa-lg"></i> Start-up Savings</a></li>
                     <li class="<?= ($activePage == 'greatsavings') ? 'active':'' ?>"><a href="{{ url('greatsavings') }}"><i class="mdi mdi-account-heart-outline fa-lg"></i> Great Savings</a></li>
                 </ul>
             </li>

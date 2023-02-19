@@ -160,6 +160,17 @@ class GreatSavings extends Model
         return $totalRebate;
     }
 
+    public static function checkSlot($id)
+    {
+        return DB::select("WITH RECURSIVE downline AS(
+            SELECT userID, 0 as level
+            FROM greatsavings where userID='$id' UNION ALL
+            SELECT g.userID, d.level+1
+            FROM downline d, greatsavings g WHERE g.sponsorID=d.userID
+        )
+        SELECT COUNT(userID)as slots FROM downline WHERE level=1");
+    }
+
     public static function totalGreatSaveStars($id)
     {
         $levelOneCount = DB::select("WITH RECURSIVE downline AS(
@@ -232,7 +243,7 @@ class GreatSavings extends Model
         return DB::table('greatsavedata')
                     ->select('encashment')
                     ->where('id', $id)
-                    ->get();
+                    ->first();
     }
 
     public static function getRebateBalance($id)

@@ -3,14 +3,17 @@
 @section('content')
 <div class="row">
     <div class="col-12 mt-3">
+        @include('message')
+
+        @yield('content')
         <div class="card">
             <div class="card">
                 <div class="card-body d-md-flex text-center">
                     <h4 class="modal-title" id="model-header">Great Savings</h4>
                     <a href="#" class="btn btn-outline-primary font-w-600 my-auto text-nowrap ml-auto add-event"
-                        data-toggle="modal" data-target="#addevent"><i class="fas fa-user-plus"></i> Add Account</a>
+                        data-toggle="modal" data-target="#addAccount"><i class="fas fa-user-plus"></i> Add Account</a>
                     <!-- Modal -->
-                    <div id="addevent" class="modal fade" role="dialog">
+                    <div id="addAccount" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-lg text-left">
                             <!-- Modal content-->
                             <div class="modal-content">
@@ -60,13 +63,7 @@
                                                             @php
                                                                 $countSlot = App\Models\StartupSavings::levelCount($sausers->userID, 1)
                                                             @endphp
-                                                            <option value={{ $sausers->userID }}
-                                                                @php
-                                                                    if($countSlot === 8)
-                                                                    {
-                                                                        echo('disabled');
-                                                                    }
-                                                                @endphp>
+                                                            <option value={{ $sausers->userID }}>
                                                                 {{ $sausers->fullName }}(@php echo ($countSlot) @endphp/8)
                                                             </option>
                                                         @endforeach
@@ -81,13 +78,7 @@
                                                         @php
                                                             $countSlot = App\Models\GreatSavings::levelCount($gsusers->userID, 1)
                                                         @endphp
-                                                            <option value={{ $gsusers->userID }}
-                                                            @php
-                                                            if($countSlot === 8)
-                                                            {
-                                                                echo('disabled');
-                                                            }
-                                                            @endphp>
+                                                            <option value={{ $gsusers->userID }}>
                                                             {{ $gsusers->fullName }}(@php echo ($countSlot) @endphp/8)
                                                             </option>
                                                         @endforeach
@@ -185,7 +176,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 @endsection

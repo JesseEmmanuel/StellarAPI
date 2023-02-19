@@ -6,6 +6,7 @@ use App\Http\Middleware;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\APP\GreatSavingsController;
+use App\Http\Controllers\APP\StartupSavingsController;
 use App\Http\Controllers\APP\HomeController;
 
 /*
@@ -25,5 +26,7 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth');
 Route::post('/login/auth', [AuthController::class, 'auth']);
 Route::get('/activation-codes', [CodeController::class, 'index']);
 Route::get('/greatsavings', [GreatSavingsController::class, 'index']);
+Route::get('/startupsavings', [StartupSavingsController::class, 'index']);
+Route::post('/startupsavings/upgrade', [StartupSavingsController::class, 'upgrade']);
 Route::post('/greatsavings/add', [GreatSavingsController::class, 'addUser']);
 Route::get('/logout', [AuthController::class, 'destroy']);

@@ -37,6 +37,24 @@ class GreatSavingsController extends Controller
             'contactInfo' => 'required',
             'email' => 'required',
         ]);
+        $saCheckSlot = StartupSavings::checkSlot($request->get('saSponsor'));
+        foreach($saCheckSlot as $sacount)
+        {
+            $saCountSlot = $sacount->slots;
+        }
+        $gsCheckSlot = GreatSavings::checkSlot($request->get('gsSponsor'));
+        foreach($gsCheckSlot as $gscount)
+        {
+            $gsCountSlot = $gscount->slots;
+        }
+        if($saCountSlot === 8)
+        {
+            return redirect('/greatsavings')->with('error', "Selected Start-up Savings' Sponsor is full");
+        }
+        if($gsCountSlot === 8)
+        {
+            return redirect('/greatsavings')->with('error', "Selected Great Savings' Sponsor is full");
+        }
         $checkCode = ActivationCode::where('activationCode', $request->get('activationCode'))->first();
         if($checkCode === null)
         {
@@ -107,7 +125,7 @@ class GreatSavingsController extends Controller
             $greatsavingsTotalRebate = GreatSavings::totalGreatSaveRebate($request->get('gsSponsor'));
             $greatsavingsTotalStars = GreatSavings::totalGreatSaveStars($request->get('gsSponsor'));
             $greatsavingsGetEncashment = GreatSavings::getEncashment($request->get('gsSponsor'));
-            $greatsavingsEncashment = $startupGetEncashment->encashment;
+            $greatsavingsEncashment = $greatsavingsGetEncashment->encashment;
             $greatsavingsRebateBalance = $greatsavingsTotalRebate-$greatsavingsEncashment;
             GreatSavings::updateGreatSave($request->get('gsSponsor'), $greatsavingsTotalRebate, $greatsavingsTotalStars, $greatsavingsEncashment, $greatsavingsRebateBalance);
             $gsSponsorData = DB::table('greatsavedata')->where('id', $request->get('gsSponsor'))->first();
