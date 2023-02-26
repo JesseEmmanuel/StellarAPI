@@ -151,7 +151,7 @@ class StartupController extends Controller
 
     public function viewLevelOne($id)
     {
-        $directRef = User::DirectReferral($id);
+        $directRef = StartupSavings::DirectReferrals($id);
         $userInfo = User::where('id', $id)->first();
         return response()->json([
             "referrals" => $directRef,
@@ -189,6 +189,13 @@ class StartupController extends Controller
         ]);
         $encash = $request->get('encash');
         $rawEncash = (int)$encash;
+        if($rawEncash < 500)
+        {
+            return response()->json([
+                "message" => "Minimum Encashment is atleast ₱500.00"
+            ], 402);
+        }
+        $vatEncash = $rawEncash + 100;
         if($rawEncash > $rawRebate)
         {
             return response()->json([
@@ -197,20 +204,21 @@ class StartupController extends Controller
         }
         else
         {
-            $newRebateBalance = $rawRebate-$rawEncash;
+            $newRebateBalance = $rawRebate-$vatEncash;
             $user = DB::table('startupdata')->where('id', $id)->first();
             $userInfo = DB::table('users')->where('id', $id)->first();
             $userFullName = $userInfo->firstName." ".$userInfo->middleName." ".$userInfo->lastName;
             $lastRebate = $user->rebate;
             $currentStars = $user->stars;
-            $newEncashment = $rawEncash + $user->encashment;
+            $newEncashment = $vatEncash + $user->encashment;
             StartupSavings::updateStartup($id, $lastRebate, $currentStars, $newEncashment, $newRebateBalance);
             $newLog = array(
                 "userID" => $id,
                 "title" => "Startup Wallet Encashment",
                 "description" => "₱".$rawEncash." "."was successfully encashed from ".$userFullName."'s"." "."Startup Account Wallet",
                 "encashment" => $rawEncash,
-                "rebateBalance" => $newRebateBalance
+                "rebateBalance" => $newRebateBalance,
+                "claim" => 0
             );
             EncashmentLogs::create($newLog);
             return response()->json([

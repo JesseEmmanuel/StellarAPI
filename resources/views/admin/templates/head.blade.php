@@ -18,6 +18,7 @@
 
     <!-- START: Page CSS-->
     <link rel="stylesheet" href="{{ url('dist/vendors/chartjs/Chart.min.css') }}">
+    <link rel="stylesheet" href="{{ url('dist/vendors/quill/quill.snow.css') }}" />
     <!-- END: Page CSS-->
 
     <!-- START: Page CSS-->

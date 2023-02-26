@@ -117,7 +117,7 @@ File: Main Style
     --bodybackground: #f6f6f7;
     --bordercolor: rgba(72, 94, 144, 0.16);
     --mainbackground: #fff;
-    --secondary: #6c757d;
+    --secondary: #0F1D41;
     --success: #1ee0ac;
     --info: #17a2b8;
     --warning: #ffc107;
@@ -741,10 +741,22 @@ a:hover {
     border-color: var(--primarycolor);
 }
 
+.btn-outline-secondary {
+    color: var(--secondary) !important;
+    border-color: var(--secondary);
+}
+
 .btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus, .btn-outline-primary.dropdown-toggle {
     box-shadow: none !important;
     border-color: var(--primarycolor) !important;
     background: var(--primarycolor) !important;
+    color: #fff !important;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:active, .btn-outline-secondary:focus, .btn-outline-secondary.dropdown-toggle {
+    box-shadow: none !important;
+    border-color: var(--secondary) !important;
+    background: var(--secondary) !important;
     color: #fff !important;
 }
 

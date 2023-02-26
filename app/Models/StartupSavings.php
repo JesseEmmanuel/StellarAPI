@@ -48,11 +48,11 @@ class StartupSavings extends Model
     {
         return DB::select("WITH RECURSIVE downline AS(
             SELECT userID, fullName, 0 as level
-            FROM startupsavings where userID='$id' UNION ALL
-            SELECT s.userID, s.fullName, d.level+1
-            FROM downline d, startupsavings s WHERE s.sponsorID=d.userID
+            FROM startupsavings  where userID='$id' UNION ALL
+            SELECT ss.userID, ss.fullName, d.level+1
+            FROM downline d, startupsavings ss WHERE ss.sponsorID=d.userID
         )
-        SELECT * FROM downline WHERE level=1");
+        SELECT downline.userID, downline.fullName, startupdata.stars FROM downline inner join startupdata on downline.userID=startupdata.id where level=1");
     }
 
     public static function levelCount($id, $levelNum)

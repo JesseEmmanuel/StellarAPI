@@ -41,10 +41,7 @@ class GreatController extends Controller
             $totalRebate = GreatSavings::totalGreatSaveRebate($id);
             $totalStars = GreatSavings::totalGreatSaveStars($id);
             $encashments = GreatSavings::getEncashment($id);
-            foreach($encashments as $cash)
-                {
-                    $rawEncashment = $cash->encashment;
-                }
+            $rawEncashment = $encashments->encashment;
             $rebateBalance = $totalRebate - $rawEncashment;
             GreatSavings::updateGreatSave($id, $totalRebate, $totalStars, $rawEncashment, $rebateBalance);
             return response()->json([
@@ -53,6 +50,16 @@ class GreatController extends Controller
                 // "Level 2 Count" => $countLevelTwo
             ], 200);
         }
+    }
+
+    public function viewLevelOne($id)
+    {
+        $directRef = GreatSavings::DirectReferrals($id);
+        $userInfo = User::where('id', $id)->first();
+        return response()->json([
+            "referrals" => $directRef,
+            "userInfo" => $userInfo
+        ], 200);
     }
 
     public function addUser(Request $request)
@@ -177,10 +184,7 @@ class GreatController extends Controller
         $totalRebate = GreatSavings::totalGreatSaveRebate($id);
         $totalStars = GreatSavings::totalGreatSaveStars($id);
         $encashment = GreatSavings::getEncashment($id);
-        foreach($encashment as $cash)
-            {
-                $rawEncashment = $cash->encashment;
-            }
+        $rawEncashment = $encashment->encashment;
         $rebateBalance = $totalRebate - $rawEncashment;
         GreatSavings::updateGreatSave($id, $totalRebate, $totalStars, $rawEncashment, $rebateBalance);
         $greatsaveRebate = GreatSavings::getRebateBalance($id);
@@ -213,7 +217,14 @@ class GreatController extends Controller
         ]);
         $encash = $request->get('encash');
         $rawEncash = (int)$encash;
-        if($rawEncash > $rawRebate)
+        if($rawEncash < 500)
+        {
+            return response()->json([
+                "message" => "Minimum Encashment is atleast ₱500.00"
+            ], 402);
+        }
+        $vatEncash = $rawEncash + 100;
+        if($vatEncash > $rawRebate)
         {
             return response()->json([
                 "message" => "Not enough balance"
@@ -221,20 +232,21 @@ class GreatController extends Controller
         }
         else
         {
-            $newRebateBalance = $rawRebate-$rawEncash;
+            $newRebateBalance = $rawRebate-$vatEncash;
             $user = DB::table('greatsavedata')->where('id', $id)->first();
             $userInfo = DB::table('users')->where('id', $id)->first();
             $userFullName = $userInfo->firstName." ".$userInfo->middleName." ".$userInfo->lastName;
             $lastRebate = $user->rebate;
             $currentStars = $user->stars;
-            $newEncashment = $rawEncash + $user->encashment;
+            $newEncashment = $vatEncash + $user->encashment;
             GreatSavings::updateGreatSave($id, $lastRebate, $currentStars, $newEncashment, $newRebateBalance);
             $newLog = array(
                 "userID" => $id,
                 "title" => "Great Savings Wallet Encashment",
-                "description" => "₱".$rawEncash." "."was successfully encashed from ".$userFullName."'s"." "."Startup Account Wallet",
+                "description" => "₱".$rawEncash." "."was successfully encashed from ".$userFullName."'s"." "."Great Savings Account Wallet",
                 "encashment" => $rawEncash,
-                "rebateBalance" => $newRebateBalance
+                "rebateBalance" => $newRebateBalance,
+                "claim" => 0
             );
             EncashmentLogs::create($newLog);
             return response()->json([

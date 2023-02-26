@@ -20,12 +20,12 @@ class GreatSavings extends Model
     public static function DirectReferrals($id)
     {
         return DB::select("WITH RECURSIVE downline AS(
-            SELECT id, firstName, middleName, lastName, activationCode, email, IsUpgraded, 0 as level
-            FROM users where id='$id' UNION ALL
-            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, u.email, u.IsUpgraded, d.level+1
-            FROM downline d, users u WHERE u.sponsorID=d.id
+            SELECT userID, fullName, 0 as level
+            FROM greatsavings  where userID='$id' UNION ALL
+            SELECT gs.userID, gs.fullName, d.level+1
+            FROM downline d, greatsavings gs WHERE gs.sponsorID=d.userID
         )
-        SELECT * FROM downline WHERE level=1 AND IsUpgraded=1");
+        SELECT downline.userID, downline.fullName, greatsavedata.stars FROM downline inner join greatsavedata on downline.userID=greatsavedata.id where level=1");
     }
 
     public static function CheckUser($id)
@@ -39,12 +39,12 @@ class GreatSavings extends Model
     public static function LevelTwoCheck($id)
     {
         return DB::select("WITH RECURSIVE downline AS(
-            SELECT id, firstName, middleName, lastName, activationCode, 0 as level
-            FROM users where id='$id' UNION ALL
-            SELECT u.id, u.firstName, u.middleName, u.lastName, u.activationCode, d.level+1
-            FROM downline d, users u WHERE u.sponsorID=d.id
+            SELECT userID, 0 as level
+            FROM greatsavings where userID='$id' UNION ALL
+            SELECT g.userID, d.level+1
+            FROM downline d, greatsavings g WHERE g.sponsorID=d.userID
         )
-        SELECT COUNT(id) as counter FROM downline WHERE level=2");
+        SELECT COUNT(userID) as counter FROM downline WHERE level=2");
     }
 
     public static function PromoteToGreatSavings($id)

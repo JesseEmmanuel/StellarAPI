@@ -8,7 +8,12 @@
             <li class="dropdown active"><a href="#"><i class="icon-home mr-1"></i> Home</a>
                 <ul>
                     <li class="<?= ($activePage == 'dashboard') ? 'active':'' ?>"><a href="{{ url('dashboard') }}"><i class="icon-grid"></i> Dashboard</a></li>
-                    <li><a href="index-account.html"><i class="mdi mdi-alarm-light-outline fa-lg"></i>Notifications</a></li>
+                    <li class="<?= ($activePage == 'notifications') ? 'active':'' ?>"><a href="{{ url('notifications') }}"><i class="mdi mdi-alarm-light-outline fa-lg"></i>Notifications
+                        <span class="ml-auto badge badge-danger">
+                            @php
+                                echo (App\Models\Notifications::countUnread());
+                            @endphp
+                            </span> </a></li>
                     <li><a href="index-analytic.html"><i class="fas fa-code"></i> Activation Codes</a></li>
                 </ul>
             </li>
@@ -21,7 +26,7 @@
             <li class="dropdown"><a href="#"><i class="icon-layers mr-1"></i> Logs</a>
                 <ul>
                     <li><a href="index-account.html"><i class="mdi mdi-account-key-outline fa-lg"></i> Users</a></li>
-                    <li><a href="index-account.html"><i class="mdi mdi-cash-multiple fa-lg"></i> Encashment</a></li>
+                    <li class="<?= ($activePage == 'encashment') ? 'active':'' ?>"><a href="{{ url('encashment') }}"><i class="mdi mdi-cash-multiple fa-lg"></i> Encashment</a></li>
                     <li><a href="index-analytic.html"><i class="mdi mdi-wallet-giftcard fa-lg"></i> Rewards Redemption</a></li>
                 </ul>
             </li>

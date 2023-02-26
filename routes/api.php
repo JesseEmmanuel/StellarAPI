@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\StartupController;
 use App\Http\Controllers\API\GreatController;
+use App\Http\Controllers\API\NotificationsController;
 use App\Http\Controllers\API\EncashmentController;
 
 /*
@@ -31,6 +32,8 @@ Route::get('/userLogs', [StartupController::class, 'startupLogs']);
 Route::get('/startupSummary', [StartupController::class, 'summaryReports']);
 Route::get('/greatsaveSummary', [GreatController::class, 'summaryReports']);
 Route::get('view-startup-referrals/{id}', [StartupController::class, 'viewLevelOne']);
+Route::get('view-greatsave-referrals/{id}', [GreatController::class, 'viewLevelOne']);
 Route::post('/startupEncashment', [StartupController::class, 'encashment']);
 Route::post('/greatsaveEncashment', [GreatController::class, 'encashment']);
 Route::get('/encashmentLogs', [EncashmentController::class, 'encashmentLogs']);
+Route::get('/notifications', [NotificationsController::class, 'notify']);

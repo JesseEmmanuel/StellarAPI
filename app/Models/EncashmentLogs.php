@@ -18,5 +18,6 @@ class EncashmentLogs extends Model
         'description',
         'encashment',
         'rebateBalance',
+        'claim'
     ];
 }

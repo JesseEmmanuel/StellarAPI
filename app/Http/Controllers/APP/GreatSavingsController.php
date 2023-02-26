@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\GreatSavings;
 use App\Models\StartupSavings;
 use App\Models\ActivationCode;
+use App\Models\Notifications;
 use App\Models\GenealogyLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,7 @@ class GreatSavingsController extends Controller
         $checkCode = ActivationCode::where('activationCode', $request->get('activationCode'))->first();
         if($checkCode === null)
         {
-            return redirect('/greatsavings')-with('error', 'Code does not exist');
+            return redirect('/greatsavings')->with('error', 'Code does not exist');
         }
         $isCodeUsed = User::where('activationCode', $request->get('activationCode'))->first();
         if($isCodeUsed === null)
@@ -100,6 +101,7 @@ class GreatSavingsController extends Controller
                 "fullName" => $newUserName
             );
             StartupSavings::newStartupUser($newStartup);
+            Notifications::startupLevelNotify($request->get('saSponsor'));
             $startupTotalRebate = StartupSavings::totalStartupRebate($request->get('saSponsor'));
             $startupTotalStars = StartupSavings::totalStartupStars($request->get('saSponsor'));
             $startupGetEncashment = StartupSavings::getEncashment($request->get('saSponsor'));
@@ -122,6 +124,7 @@ class GreatSavingsController extends Controller
                 "fullName" => $newUserName
             );
             GreatSavings::newGreatSaveUser($newGreatSave);
+            Notifications::greatLevelNotify($request->get('gsSponsor'));
             $greatsavingsTotalRebate = GreatSavings::totalGreatSaveRebate($request->get('gsSponsor'));
             $greatsavingsTotalStars = GreatSavings::totalGreatSaveStars($request->get('gsSponsor'));
             $greatsavingsGetEncashment = GreatSavings::getEncashment($request->get('gsSponsor'));

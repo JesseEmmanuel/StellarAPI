@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="card-body d-md-flex text-center">
                     <h4 class="modal-title" id="model-header">Great Savings</h4>
-                    <a href="#" class="btn btn-outline-primary font-w-600 my-auto text-nowrap ml-auto add-event"
+                    <a href="#" class="btn btn-outline-secondary font-w-600 my-auto text-nowrap ml-auto add-event"
                         data-toggle="modal" data-target="#addAccount"><i class="fas fa-user-plus"></i> Add Account</a>
                     <!-- Modal -->
                     <div id="addAccount" class="modal fade" role="dialog">
@@ -111,9 +111,9 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button id="discard" class="btn btn-outline-primary"
+                                            <button id="discard" class="btn btn-outline-secondary"
                                                 data-dismiss="modal">Discard</button>
-                                            <button id="add-event" class="btn btn-primary eventbutton" type="submit">Submit</button>
+                                            <button id="add-event" class="btn btn-secondary eventbutton" type="submit">Submit</button>
                                         </div>
                                     </form>
                                 </div>

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\GreatSavings;
 use App\Models\StartupSavings;
 use App\Models\GenealogyLogs;
+use App\Models\Notifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DB;
@@ -28,11 +29,12 @@ class StartupSavingsController extends Controller
             'gsSponsor' => 'required',
         ]);
 
-        // $countLevelTwo = StartupSavings::levelCount($request->get('startup'), 2);
-        // if($countLevelTwo < 64)
-        // {
-        //     return redirect('/startupsavings')->with('error', "Account is not valid for upgrade");
-        // }
+        $countLevelTwo = StartupSavings::levelCount($request->get('startup'), 2);
+        if($countLevelTwo < 64)
+        {
+            return redirect('/startupsavings')->with('error', "Account is not valid for upgrade");
+        }
+
         $sponsorInfo = DB::table('greatsavings')->where('userID', $request->get('gsSponsor'))->first();
         $accountInfo = DB::table('startupsavings')->where('userID', $request->get('startup'))->first();
         $accountFullname = $accountInfo->fullName;
@@ -42,6 +44,7 @@ class StartupSavingsController extends Controller
             "fullName" => $accountFullname
         );
         GreatSavings::newGreatSaveUser($upgradeAccount);
+        Notifications::greatLevelNotify($request->get('gsSponsor'));
         $updateAccount = User::find($request->get('startup'));
         $updateAccount->update(['IsUpgraded' => 1]);
         $greatsavingsTotalRebate = GreatSavings::totalGreatSaveRebate($request->get('gsSponsor'));

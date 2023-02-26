@@ -9,6 +9,10 @@
         color: '#fff'
     });
 
+    $('document').ready(function() {
+        $('.mail-menu li a.active').trigger('click');
+    });
+
 ////////////////////////////// Quill Editor ////////////////////////
     if ($("#snow-container").length > 0)
     {

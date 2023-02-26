@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\APP\GreatSavingsController;
 use App\Http\Controllers\APP\StartupSavingsController;
 use App\Http\Controllers\APP\HomeController;
+use App\Http\Controllers\APP\NotificationsController;
+use App\Http\Controllers\APP\EncashmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +32,10 @@ Route::get('/startupsavings', [StartupSavingsController::class, 'index']);
 Route::post('/startupsavings/upgrade', [StartupSavingsController::class, 'upgrade']);
 Route::post('/greatsavings/add', [GreatSavingsController::class, 'addUser']);
 Route::get('/logout', [AuthController::class, 'destroy']);
+Route::get('/notifications', [NotificationsController::class, 'index']);
+Route::get('/notifications/read/{id}', [NotificationsController::class, 'read']);
+Route::get('/notifications/unread/{id}', [NotificationsController::class, 'unread']);
+Route::get('/notifications/readAll', [NotificationsController::class, 'bulkread']);
+Route::get('/notifications/unreadAll', [NotificationsController::class, 'bulkunread']);
+Route::get('/encashment', [EncashmentController::class, 'index']);
+Route::put('/encashment/verify/{id}', [EncashmentController::class, 'verify']);
