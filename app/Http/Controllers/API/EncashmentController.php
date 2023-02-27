@@ -13,7 +13,7 @@ class EncashmentController extends Controller
     public function encashmentLogs()
     {
         $id = auth('sanctum')->user()->id;
-        $encashLogs = DB::table('encashment_logs')->where('userID', $id)->get();
+        $encashLogs = DB::table('encashment_logs')->where('userID', $id)->orderBy('created_at', 'desc')->get();
         return response()->json([
             "encashmentLogs" => $encashLogs
         ], 200);

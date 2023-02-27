@@ -34,61 +34,9 @@
                                 <td>₱{{ $encashment->rebateBalance }}.00</td>
                                 <td>
                                     @if ($encashment->claim == 0)
-                                    <a href="#"
-                                        class="btn btn-outline-danger font-w-600 my-auto text-nowrap ml-auto add-event"
-                                        data-toggle="modal" data-target="#claimEncashment"> <i class="icofont-exclamation-circle"></i> Not Yet</a><br />
-                                    <!-- Modal -->
-                                    <div id="claimEncashment" class="modal fade" role="dialog">
-                                        <div class="modal-dialog modal-lg text-left">
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="model-header">User Verification</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="encashment/verify/{{ $encashment->logID }}"
-                                                        method="POST">
-                                                        @method('PUT')
-                                                        @csrf
-                                                        <div class="row">
-                                                            <div class="col-md-12 col-sm-12 col-12">
-                                                                <label class="">Activation Code</label>
-                                                                <div class="form-group start-date">
-                                                                    <div class="d-flex">
-                                                                        <input class="form-control" type="number"
-                                                                            name="activationCode">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 col-sm-6 col-12">
-                                                                <div class="form-group start-date">
-                                                                    <div class="d-flex">
-                                                                        <input placeholder="Email" class="form-control"
-                                                                            type="email" name="email">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 col-sm-6 col-12">
-                                                                <div class="form-group start-date">
-                                                                    <div class="d-flex">
-                                                                        <input placeholder="Password"
-                                                                            class="form-control" type="password"
-                                                                            name="password">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button id="discard" class="btn btn-outline-primary"
-                                                                data-dismiss="modal">Discard</button>
-                                                            <button id="add-event" class="btn btn-primary eventbutton"
-                                                                type="submit">Submit</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a href="encashment/verify/{{ $encashment->logID }}"
+                                        class="btn btn-outline-danger font-w-600 my-auto text-nowrap ml-auto add-event">
+                                        <i class="icofont-exclamation-circle"></i> Not Yet</a><br />
                                     @else
                                     <a href="#" class="btn btn-outline-success font-w-600 my-auto text-nowrap ml-auto disabled">
                                         <i class="icofont-check-circled"></i> Success</a><br />

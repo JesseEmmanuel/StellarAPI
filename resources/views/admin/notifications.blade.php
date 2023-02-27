@@ -38,9 +38,9 @@
                         <a href="#" class="ml-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
                                 class="icon-settings"></i></a>
                                 <div class="dropdown-menu p-0 m-0 dropdown-menu-right mail-bulk-action">
-                                    <a class="dropdown-item mailread" href="/notifications/readAll"><i class="icon-book-open"></i> Mark as
+                                    <a class="dropdown-item mailread" href="/notifications/readAll"><i class="icon-book-open"></i> Mark all as
                                         Read</a>
-                                    <a class="dropdown-item mailunread" href="/notifications/unreadAll"><i class="icon-notebook"></i> Mark as
+                                    <a class="dropdown-item mailunread" href="/notifications/unreadAll"><i class="icon-notebook"></i> Mark all as
                                         unread</a>
                                 </div>
                     </div>

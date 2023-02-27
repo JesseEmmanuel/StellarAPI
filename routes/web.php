@@ -38,4 +38,4 @@ Route::get('/notifications/unread/{id}', [NotificationsController::class, 'unrea
 Route::get('/notifications/readAll', [NotificationsController::class, 'bulkread']);
 Route::get('/notifications/unreadAll', [NotificationsController::class, 'bulkunread']);
 Route::get('/encashment', [EncashmentController::class, 'index']);
-Route::put('/encashment/verify/{id}', [EncashmentController::class, 'verify']);
+Route::get('/encashment/verify/{id}', [EncashmentController::class, 'verify']);

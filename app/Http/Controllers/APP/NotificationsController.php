@@ -12,7 +12,7 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        $notifications = Notifications::getAll();
+        $notifications = Notifications::orderBy('created_at', 'desc')->get();
         return view('admin/notifications', compact('notifications'));
     }
 
