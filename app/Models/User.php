@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'sponsorID',
+        'userName',
         'activationCode',
         'firstName',
         'middleName',
@@ -121,6 +121,14 @@ class User extends Authenticatable
                     ->select('id')
                     ->where('activationCode', $activationCode)
                     ->get();
+    }
+
+    public static function updateInfo($data, $id)
+    {
+        return DB::table('users')
+                    ->where('id', $id)
+                    ->limit(1)
+                    ->update(array($data));
     }
 
 

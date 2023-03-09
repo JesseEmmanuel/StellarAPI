@@ -7,6 +7,7 @@ use App\Http\Controllers\CodeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\APP\GreatSavingsController;
 use App\Http\Controllers\APP\StartupSavingsController;
+use App\Http\Controllers\API\StartupController;
 use App\Http\Controllers\APP\HomeController;
 use App\Http\Controllers\APP\NotificationsController;
 use App\Http\Controllers\APP\EncashmentController;
@@ -39,3 +40,6 @@ Route::get('/notifications/readAll', [NotificationsController::class, 'bulkread'
 Route::get('/notifications/unreadAll', [NotificationsController::class, 'bulkunread']);
 Route::get('/encashment', [EncashmentController::class, 'index']);
 Route::get('/encashment/verify/{id}', [EncashmentController::class, 'verify']);
+
+/**Route For Email */
+Route::get('/email', [StartupController::class, 'addUser']);

@@ -38,10 +38,10 @@ class StartupSavings extends Model
     public static function logs($id)
     {
         return DB::select("WITH RECURSIVE downline AS
-                    (select id, title, description, totalRebate, created_at from genealogy_logs WHERE id = '$id'
-                    UNION ALL SELECT g.id, g.title, g.description, g.totalRebate, g.created_at FROM downline d,
-                    genealogy_logs g WHERE g.sponsorID=d.id)
-                    SELECT * from downline");
+                         (select id, title, description, totalRebate, created_at from genealogy_logs WHERE id = '1'
+                            UNION ALL SELECT g.id, g.title, g.description, g.totalRebate, g.created_at FROM downline d,
+                            genealogy_logs g WHERE g.sponsorID=d.id)
+                            SELECT DISTINCT * from downline order by created_at desc");
     }
 
     public static function DirectReferrals($id)
@@ -252,10 +252,11 @@ class StartupSavings extends Model
         $userID = $data['userID'];
         $sponsorID = $data['sponsorID'];
         $fullName = $data['fullName'];
-        DB::insert("INSERT into startupsavings (userID, sponsorID, fullName)
-                    values (?,?,?)",
+        $cycleNum = $data['cycle'];
+        DB::insert("INSERT into startupsavings (userID, sponsorID, fullName, cycle)
+                    values (?,?,?,?)",
                     [
-                        $userID, $sponsorID, $fullName
+                        $userID, $sponsorID, $fullName, $cycleNum
                     ]);
     }
 

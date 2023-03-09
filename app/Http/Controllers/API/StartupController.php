@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\WelcomeMail;
+use App\Jobs\SendMailJob;
 use DB;
 
 class StartupController extends Controller
@@ -49,7 +53,7 @@ class StartupController extends Controller
         {
             $usedSlots = $checkSlots->slots;
         }
-        if($usedSlots > 8)
+        if($usedSlots >= 8)
         {
             return response()->json([
                 "message" => "No Slots Available"
@@ -77,11 +81,13 @@ class StartupController extends Controller
         {
             $sponsorInfo = DB::table('users')->where('id', $id)->first();
             $sponsorName = $sponsorInfo->firstName." ".$sponsorInfo->lastName;
-            $password = "test123";
+            $password = Str::random(10);
             $role = "user";
             $addedUserName = $request->get('firstName')." ".$request->get('lastName');
+            $userName = $request->get('firstName').$request->get('lastName')."_"."C1";
             $newUser = array(
-                "activationCode" =>$request->get('activationCode'),
+                "userName" => $userName,
+                "activationCode" => $request->get('activationCode'),
                 "firstName" => $request->get('firstName'),
                 "middleName" => $request->get('middleName'),
                 "lastName" => $request->get('lastName'),
@@ -100,7 +106,8 @@ class StartupController extends Controller
             $newStartupUser = array(
                 "userID" => $userID,
                 "sponsorID" => $id,
-                "fullName" => $newUserName
+                "fullName" => $newUserName,
+                "cycle" => 1
             );
             StartupSavings::newStartupUser($newStartupUser);
             $totalRebate = StartupSavings::totalStartupRebate($id);
@@ -118,6 +125,10 @@ class StartupController extends Controller
             );
             StartupSavings::newStartupData($newData);
             GreatSavings::newGreatSaveData($newData);
+            $toEmail = $request->get('email');
+            $firstname = $request->get('firstName');
+            // SendMailJob::dispatch($firstname, $password, $sponsorName, $toEmail);
+            Mail::to($request->get('email'))->send(new WelcomeMail($firstname, $password, $sponsorName, $userName));
             $newLog = array(
                 "id" => $userID,
                 "sponsorID" => $id,

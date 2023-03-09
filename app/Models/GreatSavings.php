@@ -287,10 +287,11 @@ class GreatSavings extends Model
         $userID = $data['userID'];
         $sponsorID = $data['sponsorID'];
         $fullName = $data['fullName'];
-        DB::insert("INSERT into greatsavings (userID, sponsorID, fullName)
-                    values (?,?,?)",
+        $cycleNum = $data['cycle'];
+        DB::insert("INSERT into greatsavings (userID, sponsorID, fullName, cycle)
+                    values (?,?,?,?)",
                     [
-                        $userID, $sponsorID, $fullName
+                        $userID, $sponsorID, $fullName, $cycleNum
                     ]);
     }
 }

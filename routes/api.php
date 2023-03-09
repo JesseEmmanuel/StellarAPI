@@ -7,6 +7,7 @@ use App\Http\Controllers\API\StartupController;
 use App\Http\Controllers\API\GreatController;
 use App\Http\Controllers\API\NotificationsController;
 use App\Http\Controllers\API\EncashmentController;
+use App\Http\Controllers\API\RewardsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
+Route::get('/getUserInfo', [AuthController::class, 'userInfo']);
+Route::put('/updateInfo', [AuthController::class, 'updateInfo']);
+Route::put('/changePassword', [AuthController::class, 'changePassword']);
+Route::put('/forgotPassword', [AuthController::class, 'forgotPassword']);
 Route::post('/addStartupAccount', [StartupController::class, 'addUser']);
 Route::post('/addGreatSaveAccount', [GreatController::class, 'addUser']);
 Route::get('/viewStartup', [StartupController::class, 'DirectReferrals']);
@@ -37,3 +42,5 @@ Route::post('/startupEncashment', [StartupController::class, 'encashment']);
 Route::post('/greatsaveEncashment', [GreatController::class, 'encashment']);
 Route::get('/encashmentLogs', [EncashmentController::class, 'encashmentLogs']);
 Route::get('/notifications', [NotificationsController::class, 'notify']);
+Route::get('/checkRewards', [RewardsController::class, 'checkRewards']);
+Route::get('/getRewards', [RewardsController::class, 'getRewards']);

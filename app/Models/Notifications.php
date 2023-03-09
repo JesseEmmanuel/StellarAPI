@@ -20,8 +20,6 @@ class Notifications extends Model
         'title',
         'message',
         'status',
-        'created_at',
-        'updated_at'
     ];
 
     public static function getAll()
@@ -58,21 +56,8 @@ class Notifications extends Model
         $countLevelTwo = StartupSavings::levelCount($id, 2);
         $countLevelThree = StartupSavings::levelCount($id, 3);
         $countLevelFour = StartupSavings::levelCount($id, 4);
-        if($countLevelOne === 8)
-        {
-            $message = $userName." "."has completed Startup Savings Level 1";
-            $checkNotif = DB::table('notifications')->where('message', $message)->first();
-            if($checkNotif === null)
-            {
-                Notifications::create(array(
-                    "title" => 'Start-up Level 1 Completed',
-                    "message" => $message,
-                    "status" => 0
-                ));
-            }
-        }
 
-        if($countLevelTwo === 64)
+        if($countLevelTwo === 2)
         {
             $message = $userName." "."has completed Startup Savings Level 2";
             $checkNotif = DB::table('notifications')->where('message', $message)->first();
@@ -86,7 +71,7 @@ class Notifications extends Model
             }
         }
 
-        if($countLevelThree === 512)
+        if($countLevelThree === 2)
         {
             $message = $userName." "."has completed Startup Savings Level 3";
             $checkNotif = DB::table('notifications')->where('message', $message)->first();
@@ -124,61 +109,61 @@ class Notifications extends Model
         $countLevelThree = GreatSavings::levelCount($id, 3);
         $countLevelFour = GreatSavings::levelCount($id, 4);
         $countLevelFive = GreatSavings::levelCount($id, 5);
-        if($countLevelOne === 8)
-        {
-            $message = $userName." "."has completed GreatSavings Level 1";
-            $checkNotif = DB::table('notifications')->where('message', $message)->first();
-            if($checkNotif === null)
-            {
-                Notifications::create(array(
-                    "title" => 'Great Level 1 Completed',
-                    "message" => $message,
-                    "status" => 0
-                ));
-            }
-        }
+        // if($countLevelOne === 8)
+        // {
+        //     $message = $userName." "."has completed GreatSavings Level 1";
+        //     $checkNotif = DB::table('notifications')->where('message', $message)->first();
+        //     if($checkNotif === null)
+        //     {
+        //         Notifications::create(array(
+        //             "title" => 'Great Level 1 Completed',
+        //             "message" => $message,
+        //             "status" => 0
+        //         ));
+        //     }
+        // }
 
-        if($countLevelTwo === 64)
-        {
-            $message = $userName." "."has completed GreatSavings Level 2";
-            $checkNotif = DB::table('notifications')->where('message', $message)->first();
-            if($checkNotif === null)
-            {
-                Notifications::create(array(
-                    "title" => 'Great Level 2 Completed',
-                    "message" => $message,
-                    "status" => 0
-                ));
-            }
-        }
+        // if($countLevelTwo === 64)
+        // {
+        //     $message = $userName." "."has completed GreatSavings Level 2";
+        //     $checkNotif = DB::table('notifications')->where('message', $message)->first();
+        //     if($checkNotif === null)
+        //     {
+        //         Notifications::create(array(
+        //             "title" => 'Great Level 2 Completed',
+        //             "message" => $message,
+        //             "status" => 0
+        //         ));
+        //     }
+        // }
 
-        if($countLevelThree === 512)
-        {
-            $message = $userName." "."has completed GreatSavings Level 3";
-            $checkNotif = DB::table('notifications')->where('message', $message)->first();
-            if($checkNotif === null)
-            {
-                Notifications::create(array(
-                    "title" => 'Great Level 3 Completed',
-                    "message" => $message,
-                    "status" => 0
-                ));
-            }
-        }
+        // if($countLevelThree === 512)
+        // {
+        //     $message = $userName." "."has completed GreatSavings Level 3";
+        //     $checkNotif = DB::table('notifications')->where('message', $message)->first();
+        //     if($checkNotif === null)
+        //     {
+        //         Notifications::create(array(
+        //             "title" => 'Great Level 3 Completed',
+        //             "message" => $message,
+        //             "status" => 0
+        //         ));
+        //     }
+        // }
 
-        if($countLevelFour === 4096)
-        {
-            $message = $userName." "."has completed GreatSavings Level 4";
-            $checkNotif = DB::table('notifications')->where('message', $message)->first();
-            if($checkNotif === null)
-            {
-                Notifications::create(array(
-                    "title" => 'Great Level 4 Completed',
-                    "message" => $message,
-                    "status" => 0
-                ));
-            }
-        }
+        // if($countLevelFour === 4096)
+        // {
+        //     $message = $userName." "."has completed GreatSavings Level 4";
+        //     $checkNotif = DB::table('notifications')->where('message', $message)->first();
+        //     if($checkNotif === null)
+        //     {
+        //         Notifications::create(array(
+        //             "title" => 'Great Level 4 Completed',
+        //             "message" => $message,
+        //             "status" => 0
+        //         ));
+        //     }
+        // }
 
         if($countLevelFive === 32768)
         {

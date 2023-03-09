@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
+use App\Jobs\SendMailJob;
 use DB;
 
 class GreatSavingsController extends Controller
@@ -64,8 +68,10 @@ class GreatSavingsController extends Controller
         $isCodeUsed = User::where('activationCode', $request->get('activationCode'))->first();
         if($isCodeUsed === null)
         {
-            $password = "test123";
+            $userName = $request->get('firstName').$request->get('lastName')."_"."C1";
+            $password = Str::random(10);
             $newUser = array(
+                "userName" => $userName,
                 "activationCode" => $request->get('activationCode'),
                 "firstName" => $request->get('firstName'),
                 "middleName" => $request->get('middleName'),
@@ -98,7 +104,8 @@ class GreatSavingsController extends Controller
             $newStartup = array(
                 "userID" => $newUserID,
                 "sponsorID" => $request->get('saSponsor'),
-                "fullName" => $newUserName
+                "fullName" => $newUserName,
+                "cycle" => 1
             );
             StartupSavings::newStartupUser($newStartup);
             Notifications::startupLevelNotify($request->get('saSponsor'));
@@ -121,7 +128,8 @@ class GreatSavingsController extends Controller
             $newGreatSave = array(
                 "userID" => $newUserID,
                 "sponsorID" => $request->get('gsSponsor'),
-                "fullName" => $newUserName
+                "fullName" => $newUserName,
+                "cycle" => 1
             );
             GreatSavings::newGreatSaveUser($newGreatSave);
             Notifications::greatLevelNotify($request->get('gsSponsor'));
@@ -141,6 +149,7 @@ class GreatSavingsController extends Controller
                 "totalRebate" => $gsSponsorRebate,
             );
             GenealogyLogs::create($newGreatSaveLog);
+            Mail::to($request->get('email'))->send(new WelcomeMail($request->get('firstName'), $password, "Admin", $userName));
             return redirect('/greatsavings')->with('message', 'New Account Added Successfully');
         }
         else
