@@ -65,4 +65,13 @@ class StartupSavingsController extends Controller
         GenealogyLogs::create($newGreatSaveLog);
         return redirect('/startupsavings')->with('success', "Account is successfully upgraded. Please check at Great Savings Account List");
     }
+
+    public function newCycle(Request $request, $id)
+    {
+        $sponsor = Validator::make($request->all(), [
+            'startup' => 'required',
+        ]);
+        $userInfo = DB::table('users')->where('id', $id)->first();
+        dd($userInfo);
+    }
 }

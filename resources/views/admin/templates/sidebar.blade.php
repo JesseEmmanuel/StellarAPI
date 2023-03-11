@@ -14,7 +14,7 @@
                                 echo (App\Models\Notifications::countUnread());
                             @endphp
                             </span> </a></li>
-                    <li><a href="index-analytic.html"><i class="fas fa-code"></i> Activation Codes</a></li>
+                    <li class="<?= ($activePage == 'activationCodes') ? 'active':'' ?>"><a href="{{ url('activationCodes') }}"><i class="fas fa-code"></i> Activation Codes</a></li>
                 </ul>
             </li>
             <li class="dropdown"><a href="#"><i class="icon-organization mr-1"></i> Accounts</a>
@@ -25,9 +25,9 @@
             </li>
             <li class="dropdown"><a href="#"><i class="icon-layers mr-1"></i> Logs</a>
                 <ul>
-                    <li><a href="index-account.html"><i class="mdi mdi-account-key-outline fa-lg"></i> Users</a></li>
+                    <li class="<?= ($activePage == 'users') ? 'active':'' ?>"><a href="{{ url('users') }}"><i class="mdi mdi-account-key-outline fa-lg"></i> Users</a></li>
                     <li class="<?= ($activePage == 'encashment') ? 'active':'' ?>"><a href="{{ url('encashment') }}"><i class="mdi mdi-cash-multiple fa-lg"></i> Encashment</a></li>
-                    <li><a href="index-analytic.html"><i class="mdi mdi-wallet-giftcard fa-lg"></i> Rewards Redemption</a></li>
+                    <li class="<?= ($activePage == 'rewards') ? 'active':'' ?>"><a href="{{ url('rewards') }}" ><i class="mdi mdi-wallet-giftcard fa-lg"></i> Rewards Redemption</a></li>
                 </ul>
             </li>
         </ul>

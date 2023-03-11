@@ -81,7 +81,8 @@ class GreatSavingsController extends Controller
                 "email" => $request->get('email'),
                 "password" => Hash::make($password),
                 "IsUpgraded" => 1,
-                "role" => "user"
+                "role" => "user",
+                "cycle" => 1
             );
             User::create($newUser);
             ActivationCode::codeStatus($request->get('activationCode'));

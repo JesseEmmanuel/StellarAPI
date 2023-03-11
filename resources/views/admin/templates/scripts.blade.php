@@ -24,6 +24,7 @@
 <!-- END: Page Vendor JS-->
 
 <!-- START: Page JS-->
+<script src="{{ url('dist/js/footable.script.js') }}"></script>
 <script src="{{ url('dist/js/select2.script.js') }}"></script>
 <script src="{{ url('dist/js/home.script.js') }}"></script>
 <script src="{{ url('dist/js/datatable.script.js') }}"></script>

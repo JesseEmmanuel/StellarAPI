@@ -113,4 +113,11 @@ class Rewards extends Model
                             FROM rewards INNER JOIN user_rewards ON rewards.rewardsID = user_rewards.rewardsID
                             WHERE (((user_rewards.userID)='$id') AND ((user_rewards.redeemStatus)=0))");
     }
+
+    public static function getAllRewards()
+    {
+        return DB::select("SELECT user_rewards.id, user_rewards.userID, users.firstName, users.middleName, users.lastName, rewards.rewardsID, rewards.rewardsItem,
+                           user_rewards.redeemStatus, user_rewards.created_at FROM rewards INNER JOIN (users INNER JOIN user_rewards ON users.id = user_rewards.userID)
+                           ON rewards.rewardsID = user_rewards.rewardsID");
+    }
 }

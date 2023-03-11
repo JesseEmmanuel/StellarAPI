@@ -31,6 +31,7 @@ class User extends Authenticatable
         'password',
         'IsUpgraded',
         'role',
+        'cycle',
     ];
 
     protected $table = 'users';

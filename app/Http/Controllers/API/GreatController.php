@@ -121,7 +121,8 @@ class GreatController extends Controller
                 "email" => $request->get('email'),
                 "password" => Hash::make($password),
                 "IsUpgraded" => 1,
-                "role" => "user"
+                "role" => "user",
+                "cycle" => 1
             );
             User::create($newUser);
             $userID = User::select('id')->where('activationCode', $activationCode)->get();

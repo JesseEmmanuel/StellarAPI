@@ -20,9 +20,9 @@ use App\Http\Controllers\API\RewardsController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::get('/getUserInfo', [AuthController::class, 'userInfo']);

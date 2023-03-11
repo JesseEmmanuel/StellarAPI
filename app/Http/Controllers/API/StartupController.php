@@ -96,7 +96,8 @@ class StartupController extends Controller
                 "email" => $request->get('email'),
                 "password" => Hash::make($password),
                 "IsUpgraded" => 0,
-                "role" => "user"
+                "role" => "user",
+                "cycle" => 1
             );
             User::create($newUser);
             ActivationCode::codeStatus($request->get('activationCode'));
@@ -128,7 +129,7 @@ class StartupController extends Controller
             $toEmail = $request->get('email');
             $firstname = $request->get('firstName');
             // SendMailJob::dispatch($firstname, $password, $sponsorName, $toEmail);
-            Mail::to($request->get('email'))->send(new WelcomeMail($firstname, $password, $sponsorName, $userName));
+            // Mail::to($request->get('email'))->send(new WelcomeMail($firstname, $password, $sponsorName, $userName));
             $newLog = array(
                 "id" => $userID,
                 "sponsorID" => $id,

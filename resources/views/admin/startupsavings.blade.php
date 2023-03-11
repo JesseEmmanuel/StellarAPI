@@ -11,7 +11,8 @@
                 <div class="card-body d-md-flex text-center">
                     <h4 class="modal-title" id="model-header">Start-up Savings</h4>
                     <a href="#" class="btn btn-outline-primary font-w-600 my-auto text-nowrap ml-auto add-event"
-                        data-toggle="modal" data-target="#upgradeAccount"><i class="far fa-arrow-alt-circle-up"></i> Upgrade an account</a>
+                        data-toggle="modal" data-target="#upgradeAccount"><i class="far fa-arrow-alt-circle-up"></i>
+                        Upgrade an account</a>
                     <!-- Modal -->
                     <div id="upgradeAccount" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-lg text-left">
@@ -29,12 +30,13 @@
                                                     <label>Choose an Account:</label>
                                                     <select name="startup">
                                                         @foreach ($startups as $sausers)
-                                                            @php
-                                                                $countSlot = App\Models\StartupSavings::levelCount($sausers->userID, 2)
-                                                            @endphp
-                                                            <option value={{ $sausers->userID }}>
-                                                                {{ $sausers->fullName }}(@php echo ($countSlot) @endphp/64)
-                                                            </option>
+                                                        @php
+                                                        $countSlot =
+                                                        App\Models\StartupSavings::levelCount($sausers->userID, 2)
+                                                        @endphp
+                                                        <option value={{ $sausers->userID }}>
+                                                            {{ $sausers->fullName }}(@php echo ($countSlot) @endphp/64)
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -45,11 +47,12 @@
                                                     <select name="gsSponsor">
                                                         @foreach ($gsList as $gsusers)
                                                         @php
-                                                            $countSlot = App\Models\GreatSavings::levelCount($gsusers->userID, 1)
+                                                        $countSlot =
+                                                        App\Models\GreatSavings::levelCount($gsusers->userID, 1)
                                                         @endphp
-                                                            <option value={{ $gsusers->userID }}>
+                                                        <option value={{ $gsusers->userID }}>
                                                             {{ $gsusers->fullName }}(@php echo ($countSlot) @endphp/8)
-                                                            </option>
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -58,7 +61,8 @@
                                         <div class="modal-footer">
                                             <button id="discard" class="btn btn-outline-primary"
                                                 data-dismiss="modal">Discard</button>
-                                            <button id="add-event" class="btn btn-primary eventbutton" type="submit">Submit</button>
+                                            <button id="add-event" class="btn btn-primary eventbutton"
+                                                type="submit">Submit</button>
                                         </div>
                                     </form>
                                 </div>
@@ -81,7 +85,8 @@
                                 <th>Level 2</th>
                                 <th>Level 3</th>
                                 <th>Level 4</th>
-                                <th>Level 5</th>
+                                <th>Cycle No.</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,10 +114,52 @@
                                     echo (App\Models\StartupSavings::levelCount($sausers->userID, 4));
                                     @endphp
                                 </td>
+                                <td>{{ $sausers->cycle }}</td>
                                 <td>
-                                    @php
-                                    echo (App\Models\StartupSavings::levelCount($sausers->userID, 5));
-                                    @endphp
+                                    <a href="#"
+                                        class="btn btn-outline-primary font-w-600 my-auto text-nowrap ml-auto add-event"
+                                        data-toggle="modal" data-target="#newCycle{{$sausers->userID}}"><i class="fas fa-redo"></i> Add New
+                                        Cycle</a>
+                                    <div id="newCycle{{$sausers->userID}}" class="modal fade" role="dialog">
+                                        <div class="modal-dialog modal-lg text-left">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="model-header">Select new Startup Savings Sponsor</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route("new-cycle", ["id" => $sausers->userID]) }}" method="POST">
+                                                        @csrf
+                                                        <div class="row">
+                                                            <div class="col-md-12 col-sm-12 col-12">
+                                                                <div class="form-group">
+                                                                    <select name="startup">
+                                                                        @foreach ($saList as $users)
+                                                                        @php
+                                                                        $countSlot =
+                                                                        App\Models\StartupSavings::levelCount($users->userID,
+                                                                        1)
+                                                                        @endphp
+                                                                        <option value={{ $users->userID }}>
+                                                                            {{ $users->fullName }}(@php echo
+                                                                            ($countSlot) @endphp/8)
+                                                                        </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button id="discard" class="btn btn-outline-primary"
+                                                                data-dismiss="modal">Cancel</button>
+                                                            <button id="add-event" class="btn btn-primary eventbutton"
+                                                                type="submit">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach

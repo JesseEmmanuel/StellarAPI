@@ -23,7 +23,7 @@ class StartupSavings extends Model
 
     public static function getAll()
     {
-        return DB::select("SELECT users.activationCode, startupsavings.fullName, users.role, startupsavings.userID
+        return DB::select("SELECT users.activationCode, startupsavings.fullName, users.role, users.cycle, startupsavings.userID
         FROM startupsavings INNER JOIN users ON startupsavings.userID = users.id
         WHERE (((users.role)='user'))");
     }
